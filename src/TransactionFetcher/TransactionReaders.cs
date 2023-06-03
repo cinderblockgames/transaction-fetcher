@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using TransactionFetcher.Readers;
 
@@ -5,10 +6,13 @@ namespace TransactionFetcher;
 
 public class TransactionReaders
 {
-    public ITransactionReader[] Instances { get; private set; }
+    public ITransactionReader[] Instances { get; }
+    private CultureInfo Locale { get; }
     
-    public TransactionReaders(string folder)
+    public TransactionReaders(string folder, CultureInfo locale)
     {
+        Locale = locale;
+        
         Console.WriteLine($"Loading accounts from {folder}.");
         Instances = Directory.EnumerateFiles(folder)
             .Select(BuildTransactionReader)
@@ -23,7 +27,7 @@ public class TransactionReaders
 
         var type = Type.GetType(options!.Type!);
         var reader = (ITransactionReader)Activator.CreateInstance(type!)!;
-        reader.Initialize((TransactionReaderOptions)JsonSerializer.Deserialize(text, reader.OptionsType)!);
+        reader.Initialize((TransactionReaderOptions)JsonSerializer.Deserialize(text, reader.OptionsType)!, Locale);
         return reader;
     }
 }

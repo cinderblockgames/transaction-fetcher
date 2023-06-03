@@ -1,3 +1,4 @@
+using System.Globalization;
 using Jering.Javascript.NodeJS;
 using Microsoft.Extensions.DependencyInjection;
 using TransactionFetcher.ActualWrapper;
@@ -40,7 +41,9 @@ public static class Dependencies
         services.AddSingleton<Imap>();
         
         // Transaction readers.
-        services.AddSingleton(new TransactionReaders(env.AccountsFolder));
+        services.AddSingleton(new CultureInfo(env.Locale));
+        services.AddSingleton(provider =>
+            new TransactionReaders(env.AccountsFolder, provider.GetRequiredService<CultureInfo>()));
         services.AddSingleton<TransactionProcessor>();
     }
 }

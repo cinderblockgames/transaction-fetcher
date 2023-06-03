@@ -17,11 +17,12 @@ public class EnvironmentVariables
     public string ImapPort { get; }
     
     public string AccountsFolder { get; set; }
+    public string Locale { get; set; }
     
     private EnvironmentVariables(
         string serverUrl, string serverPassword, string budgetSyncId,
         string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls, string imapPort,
-        string accountsFolder)
+        string accountsFolder, string locale)
     {
         ServerUrl = serverUrl;
         ServerPassword = serverPassword;
@@ -35,6 +36,7 @@ public class EnvironmentVariables
         ImapPort = imapPort;
 
         AccountsFolder = accountsFolder;
+        Locale = locale;
     }
 
     public static EnvironmentVariables Build()
@@ -128,9 +130,15 @@ public class EnvironmentVariables
             accountsFolder = "/accounts";
         }
         
+        if (!env.TryGetValue("LOCALE", out string? locale) || string.IsNullOrWhiteSpace(locale))
+        {
+            Console.WriteLine("LOCALE not provided; defaulting to en-US.");
+            locale = "en-US";
+        }
+        
         return new EnvironmentVariables(
             serverUrl, serverPassword, budgetSyncId,
             mailServer, mailUsername, mailPassword, mailFolder, mailUseTls, imapPort,
-            accountsFolder);
+            accountsFolder, locale);
     }
 }
