@@ -44,7 +44,7 @@ public class TargetRedCardTransactionReader : ITransactionReader
         var transaction = new Transaction
         {
             Account = Options!.AccountId,
-            Date = message.Date.Date,
+            //Date = message.Date.Date,
             PayeeName = match.Groups["payee"].Value,
             AmountInCents = -1 * (int)(decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale) * 100)
         };
