@@ -22,12 +22,12 @@ if ("list-folders".Equals(args.FirstOrDefault(), StringComparison.OrdinalIgnoreC
 }
 else
 {
-    // Check for transactions every 10 minutes.
+    // Check for transactions every five minutes.
     var importer = host.Services.BuildProcessor<TransactionProcessor>(
 #if DEBUG
         TimeSpan.FromMinutes(1)
 #else
-    TimeSpan.FromMinutes(10)
+    TimeSpan.FromMinutes(5)
 #endif
     );
 
