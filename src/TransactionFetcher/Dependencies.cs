@@ -18,9 +18,6 @@ public static class Dependencies
             options.ProjectPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "js"));
         services.Configure<OutOfProcessNodeJSServiceOptions>(options =>
         {
-            // Fail faster.
-            options.TimeoutMS = 5000;
-            
             // Don't retry; just makes the logs harder to understand.
             // The app will retry every tick anyway; doesn't have to happen immediately.
             options.NumConnectionRetries = 0;
