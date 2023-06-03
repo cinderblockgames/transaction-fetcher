@@ -13,7 +13,7 @@ public class Transaction
     public Guid Account { get; set; }
     
     [JsonPropertyName("date"), JsonDateOnly] // date, required
-    public DateTime? Date { get; set; }
+    public DateTime Date { get; set; }
     
     #endregion
     
