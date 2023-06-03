@@ -8,10 +8,6 @@ async function addTransactions(connectionInfo, accountId, transactions) {
     // Add the new transactions.
     await api.addTransactions(accountId, transactions);
 
-    // Sync the new transactions to the server.
-    // Temporary until api.shutdown() syncs, which will be with the next @actual-app/api release.
-    await api.internal.send('sync');
-
     // All done.
     await api.shutdown();
 }
