@@ -39,23 +39,16 @@ internal class TransactionProcessor : Processor
                         found = true;
                         Console.WriteLine($"{reader.Name} transaction alert found.");
                         var transaction = reader.Read(message);
-                        if (transaction != null)
+                        try
                         {
-                            try
-                            {
-                                await Actual.AddTransaction(transaction.Account!.Value, transaction);
-                                await folder.StoreAsync(id, Seen);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(
-                                    $"{reader.Name} transaction alert '{message.Subject}' unable to be processed.");
-                                Console.WriteLine(ex);
-                            }
+                            await Actual.AddTransaction(transaction.Account!.Value, transaction);
+                            await folder.StoreAsync(id, Seen);
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            Console.WriteLine($"{reader.Name} transaction alert '{message.Subject}' unable to be read.");
+                            Console.WriteLine(
+                                $"{reader.Name} transaction alert '{message.Subject}' unable to be processed.");
+                            Console.WriteLine(ex);
                         }
                     }
                 }
