@@ -8,6 +8,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.Ally", "TransactionFetcher.Readers.Ally\TransactionFetcher.Readers.Ally.csproj", "{EBAF1A75-D216-4660-BC70-9D255F762AA7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.MailWrapper", "TransactionFetcher.MailWrapper\TransactionFetcher.MailWrapper.csproj", "{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +32,9 @@ Global
 		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
