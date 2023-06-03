@@ -17,6 +17,7 @@
       <ProjectReference Include="..\TransactionFetcher.ActualWrapper\TransactionFetcher.ActualWrapper.csproj" />
       <ProjectReference Include="..\TransactionFetcher.MailWrapper\TransactionFetcher.MailWrapper.csproj" />
       <ProjectReference Include="..\TransactionFetcher.Readers.Ally\TransactionFetcher.Readers.Ally.csproj" />
+      <ProjectReference Include="..\TransactionFetcher.Readers.TargetRedCard\TransactionFetcher.Readers.TargetRedCard.csproj" />
       <ProjectReference Include="..\TransactionFetcher.Readers\TransactionFetcher.Readers.csproj" />
     </ItemGroup>
 

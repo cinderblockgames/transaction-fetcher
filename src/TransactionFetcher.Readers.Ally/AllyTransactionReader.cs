@@ -6,17 +6,23 @@ namespace TransactionFetcher.Readers.Ally;
 
 public class AllyTransactionReader : ITransactionReader
 {
-    private AllyTransactionReaderOptions? Options { get; set; }
+    #region " Setup "
+
+    public string Name => "Ally";
+    public Type OptionsType => typeof(LastFourTransactionReaderOptions);
+
+    private LastFourTransactionReaderOptions? Options { get; set; }
     private CultureInfo? Locale { get; set; }
 
     public void Initialize(TransactionReaderOptions options, CultureInfo locale)
     {
-        Options = (AllyTransactionReaderOptions)options;
+        Options = (LastFourTransactionReaderOptions)options;
         Locale = locale;
     }
 
-    public string Name => "Ally";
-    public Type OptionsType => typeof(AllyTransactionReaderOptions);
+    #endregion
+
+    #region " CanRead "
 
     public bool CanRead(MimeMessage message)
     {
@@ -25,22 +31,31 @@ public class AllyTransactionReader : ITransactionReader
                && message.HtmlBody.Contains($"<nobr>{Options!.LastFour}</nobr>");
     }
 
-    public Transaction? Read(MimeMessage message)
+    #endregion
+
+    #region " read "
+
+    public Transaction Read(MimeMessage message)
     {
         var text = GetRelevantText(message.HtmlBody);
-        
-        var transaction = new Transaction { Account = Options!.AccountId };
-        transaction.Date = NextDate(text, "Date:");
-        transaction.PayeeName = NextValue(text, "Transaction:");
-        transaction.AmountInCents = (int)(NextDecimal(text, "Ally Bank Alert", 3) * 100);
+
+        var transaction = new Transaction
+        {
+            Account = Options!.AccountId,
+            Date = NextDate(text, "Date:"),
+            PayeeName = NextValue(text, "Transaction:"),
+            AmountInCents = (int)(NextDecimal(text, "Ally Bank Alert", 3) * 100)
+        };
 
         if (IsNegative(message.Subject))
         {
             transaction.AmountInCents *= -1;
         }
-        
+
         return transaction;
     }
+
+    #region " Helpers "
 
     private bool IsNegative(string subject)
     {
@@ -52,19 +67,19 @@ public class AllyTransactionReader : ITransactionReader
         var index = text.IndexOf(after);
         return text[index + skip];
     }
-    
+
     private decimal NextDecimal(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
         return decimal.Parse(value, NumberStyles.Currency, Locale);
     }
-    
+
     private DateTime NextDate(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
         return DateTime.ParseExact(value, "M/d/yyyy", Locale, DateTimeStyles.None);
     }
-    
+
     private List<string> GetRelevantText(string html)
     {
         var doc = new HtmlDocument();
@@ -77,4 +92,8 @@ public class AllyTransactionReader : ITransactionReader
             .Split('\n', StringSplitOptions.RemoveEmptyEntries)
             .ToList();
     }
+
+    #endregion
+
+    #endregion
 }

@@ -10,5 +10,5 @@ public interface ITransactionReader
     
     void Initialize(TransactionReaderOptions options, CultureInfo locale);
     bool CanRead(MimeMessage message);
-    Transaction? Read(MimeMessage message);
+    Transaction Read(MimeMessage message);
 }
