@@ -41,5 +41,6 @@ public static class Dependencies
         
         // Transaction readers.
         services.AddSingleton(new TransactionReaders(env.AccountsFolder));
+        services.AddSingleton<TransactionProcessor>();
     }
 }
