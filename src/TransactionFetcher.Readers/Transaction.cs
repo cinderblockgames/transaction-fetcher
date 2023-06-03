@@ -10,10 +10,10 @@ public class Transaction
     // Jed Fox:
     // You don’t need to pass the `account`, the add transaction logic will automatically set it to the `accountId` you pass in
     [JsonPropertyName("account")] // id, required
-    public Guid Account { get; set; }
+    public Guid? Account { get; set; }
     
     [JsonPropertyName("date"), JsonDateOnly] // date, required
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     
     #endregion
     

@@ -43,7 +43,7 @@ internal class TransactionProcessor : Processor
                         {
                             try
                             {
-                                await Actual.AddTransaction(transaction.Account, transaction);
+                                await Actual.AddTransaction(transaction.Account!.Value, transaction);
                                 await folder.StoreAsync(id, Seen);
                             }
                             catch (Exception ex)
