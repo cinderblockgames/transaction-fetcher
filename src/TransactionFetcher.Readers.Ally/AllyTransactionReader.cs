@@ -26,6 +26,7 @@ public class AllyTransactionReader : ITransactionReader
     public Transaction? Read(MimeMessage message)
     {
         var text = GetRelevantText(message.HtmlBody);
+        Console.WriteLine(text); // TODO: REMOVE
         
         var transaction = new Transaction { Account = Options!.AccountId };
         transaction.Date = NextDate(text, "Date:");
@@ -54,12 +55,14 @@ public class AllyTransactionReader : ITransactionReader
     private decimal NextDecimal(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
+        Console.WriteLine($"decimal: {value}"); // TODO: REMOVE
         return decimal.Parse(value, NumberStyles.Currency);
     }
     
     private DateTime NextDate(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
+        Console.WriteLine($"date: {value}"); // TODO: REMOVE
         return DateTime.ParseExact(value, "M/d/yyyy", CultureInfo.CurrentCulture, DateTimeStyles.None);
     }
     

@@ -9,7 +9,7 @@ public class TransactionReaders
     
     public TransactionReaders(string folder)
     {
-        Console.WriteLine($"Loading accounts from '{folder}.'");
+        Console.WriteLine($"Loading accounts from {folder}.");
         Instances = Directory.EnumerateFiles(folder)
             .Select(BuildTransactionReader)
             .ToArray();
@@ -17,7 +17,7 @@ public class TransactionReaders
 
     private ITransactionReader BuildTransactionReader(string path)
     {
-        Console.WriteLine($"Loading account from '{path}.'");
+        Console.WriteLine($"Loading account from {path}.");
         var text = File.ReadAllText(path);
         var options = JsonSerializer.Deserialize<TransactionReaderOptions>(text);
 
