@@ -37,7 +37,7 @@ internal class TransactionProcessor : Processor
                     if (reader.CanRead(message))
                     {
                         found = true;
-                        Console.WriteLine($"{reader.Name} transaction alert found.");
+                        Console.WriteLine($"::: {reader.Name} transaction alert found.");
                         var transaction = reader.Read(message);
                         try
                         {

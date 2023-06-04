@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Net;
 using System.Text.RegularExpressions;
 using MimeKit;
 
@@ -36,6 +37,52 @@ public class TargetRedCardTransactionReader : ITransactionReader
     #region " Read "
 
     public Transaction Read(MimeMessage message)
+    {
+        return TryReadPayment(message)
+               ?? TryReadCredit(message)
+               ?? ReadDebit(message);
+    }
+
+    private Transaction? TryReadPayment(MimeMessage message)
+    {
+        if (message.Subject.Equals("Thanks for your payment", StringComparison.OrdinalIgnoreCase))
+        {
+            var match = Regex.Match(
+                message.HtmlBody,
+                @"A payment of .?(?<amount>[\d., ]+) has recently posted");
+
+            var transaction = new Transaction
+            {
+                Account = Options!.AccountId,
+                Date = message.Date.Date,
+                Amount = TransactionAmount.Deposit(
+                    decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale))
+            };
+
+            return transaction;
+        }
+
+        return null;
+    }
+
+    private Transaction? TryReadCredit(MimeMessage message)
+    {
+        if (message.Subject.Equals("A credit posted to your account", StringComparison.OrdinalIgnoreCase))
+        {
+            var transaction = new Transaction
+            {
+                Account = Options!.AccountId,
+                Date = message.Date.Date,
+                Notes = "Unknown credit; check card for details.  (May be card payment.)"
+            };
+
+            return transaction;
+        }
+
+        return null;
+    }
+
+    private Transaction ReadDebit(MimeMessage message)
     {
         var match = Regex.Match(
             message.HtmlBody,
