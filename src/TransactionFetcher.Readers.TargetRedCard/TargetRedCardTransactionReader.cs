@@ -55,7 +55,8 @@ public class TargetRedCardTransactionReader : ITransactionReader
                 Account = Options!.AccountId,
                 Date = message.Date.Date,
                 Amount = TransactionAmount.Deposit(
-                    decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale))
+                    decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale)),
+                Notes = "Card statement payment"
             };
 
             return transaction;
