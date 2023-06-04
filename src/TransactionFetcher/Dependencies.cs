@@ -30,7 +30,8 @@ public static class Dependencies
         {
             ServerUrl = env.ServerUrl,
             ServerPassword = env.ServerPassword,
-            BudgetSyncId = Guid.Parse(env.BudgetSyncId)
+            BudgetSyncId = Guid.Parse(env.BudgetSyncId),
+            DataDir = env.DataDir
         });
         services.AddSingleton<Actual>();
         

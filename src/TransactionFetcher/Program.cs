@@ -25,7 +25,7 @@ else
     // Check for transactions every five minutes.
     var importer = host.Services.BuildProcessor<TransactionProcessor>(
 #if DEBUG
-        TimeSpan.FromMinutes(1)
+        TimeSpan.FromSeconds(10)
 #else
     TimeSpan.FromMinutes(5)
 #endif

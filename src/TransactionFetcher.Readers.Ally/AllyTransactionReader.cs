@@ -33,7 +33,7 @@ public class AllyTransactionReader : ITransactionReader
 
     #endregion
 
-    #region " read "
+    #region " Read "
 
     public Transaction Read(MimeMessage message)
     {

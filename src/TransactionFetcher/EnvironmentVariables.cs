@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices.ComTypes;
 using Environment = SLSAK.Utilities.Environment;
 using File = SLSAK.Docker.IO.File;
 
@@ -7,26 +8,29 @@ public class EnvironmentVariables
 {
     public string ServerUrl { get; }
     public string ServerPassword { get; }
-    public string BudgetSyncId { get;  }
-    
+    public string BudgetSyncId { get; }
+    public string DataDir { get; }
+
     public string MailServer { get; }
     public string MailUsername { get; }
     public string MailPassword { get; }
     public string? MailFolder { get; }
     public string MailUseTls { get; }
     public string ImapPort { get; }
-    
+
     public string AccountsFolder { get; set; }
     public string Locale { get; set; }
-    
+
     private EnvironmentVariables(
-        string serverUrl, string serverPassword, string budgetSyncId,
-        string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls, string imapPort,
+        string serverUrl, string serverPassword, string budgetSyncId, string dataDir,
+        string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls,
+        string imapPort,
         string accountsFolder, string locale)
     {
         ServerUrl = serverUrl;
         ServerPassword = serverPassword;
         BudgetSyncId = budgetSyncId;
+        DataDir = dataDir;
 
         MailServer = mailServer;
         MailUsername = mailUsername;
@@ -46,13 +50,14 @@ public class EnvironmentVariables
         // -----------------
         //   ACTUAL
         // -----------------
-        
+
         if (!env.TryGetValue("SERVER_URL", out string? serverUrl) || string.IsNullOrWhiteSpace(serverUrl))
         {
             throw new Exception("SERVER_URL must be valued.");
         }
-        
-        if (!env.TryGetValue("SERVER_PASSWORD", out string? serverPassword) || string.IsNullOrWhiteSpace(serverPassword))
+
+        if (!env.TryGetValue("SERVER_PASSWORD", out string? serverPassword) ||
+            string.IsNullOrWhiteSpace(serverPassword))
         {
             if (!env.TryGetValue("SERVER_PASSWORD_FILE", out string? serverPasswordFile) ||
                 string.IsNullOrWhiteSpace(serverPasswordFile) ||
@@ -67,12 +72,18 @@ public class EnvironmentVariables
                 throw new Exception("SERVER_PASSWORD or SERVER_PASSWORD_FILE (and related file) must be valued.");
             }
         }
-        
+
         if (!env.TryGetValue("BUDGET_SYNC_ID", out string? budgetSyncId) || string.IsNullOrWhiteSpace(budgetSyncId))
         {
             throw new Exception("BUDGET_SYNC_ID must be valued.");
         }
         
+        if (!env.TryGetValue("DATA_DIR", out string? dataDir) || string.IsNullOrWhiteSpace(dataDir))
+        {
+            Console.WriteLine("DATA_DIR not provided; defaulting to /data.");
+            dataDir = "/data";
+        }
+
         // -----------------
         //   IMAP
         // -----------------
@@ -81,12 +92,12 @@ public class EnvironmentVariables
         {
             throw new Exception("MAIL_SERVER must be valued.");
         }
-        
+
         if (!env.TryGetValue("MAIL_USERNAME", out string? mailUsername) || string.IsNullOrWhiteSpace(mailUsername))
         {
             throw new Exception("MAIL_USERNAME must be valued.");
         }
-        
+
         if (!env.TryGetValue("MAIL_PASSWORD", out string? mailPassword) || string.IsNullOrWhiteSpace(mailPassword))
         {
             if (!env.TryGetValue("MAIL_PASSWORD_FILE", out string? mailPasswordFile) ||
@@ -102,7 +113,7 @@ public class EnvironmentVariables
                 throw new Exception("MAIL_PASSWORD or MAIL_PASSWORD_FILE (and related file) must be valued.");
             }
         }
-        
+
         if (!env.TryGetValue("MAIL_FOLDER", out string? mailFolder) || string.IsNullOrWhiteSpace(mailFolder))
         {
             Console.WriteLine("MAIL_FOLDER not provided; defaulting to inbox.");
@@ -113,7 +124,7 @@ public class EnvironmentVariables
             Console.WriteLine("MAIL_USER_TLS not provided; defaulting to false.");
             mailUseTls = "false";
         }
-        
+
         if (!env.TryGetValue("IMAP_PORT", out string? imapPort) || string.IsNullOrWhiteSpace(imapPort))
         {
             Console.WriteLine("IMAP_PORT not provided; defaulting to 143.");
@@ -124,20 +135,21 @@ public class EnvironmentVariables
         //   ACCOUNTS
         // -----------------
 
-        if (!env.TryGetValue("ACCOUNTS_FOLDER", out string? accountsFolder) || string.IsNullOrWhiteSpace(accountsFolder))
+        if (!env.TryGetValue("ACCOUNTS_FOLDER", out string? accountsFolder) ||
+            string.IsNullOrWhiteSpace(accountsFolder))
         {
             Console.WriteLine("ACCOUNTS_FOLDER not provided; defaulting to /accounts.");
             accountsFolder = "/accounts";
         }
-        
+
         if (!env.TryGetValue("LOCALE", out string? locale) || string.IsNullOrWhiteSpace(locale))
         {
             Console.WriteLine("LOCALE not provided; defaulting to en-US.");
             locale = "en-US";
         }
-        
+
         return new EnvironmentVariables(
-            serverUrl, serverPassword, budgetSyncId,
+            serverUrl, serverPassword, budgetSyncId, dataDir,
             mailServer, mailUsername, mailPassword, mailFolder, mailUseTls, imapPort,
             accountsFolder, locale);
     }

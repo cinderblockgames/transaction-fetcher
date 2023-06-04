@@ -3,7 +3,7 @@ const api = require('@actual-app/api');
 async function addTransactions(connectionInfo, accountId, transactions) {
     // Connect and sync up.
     await api.init({
-        dataDir: '/data',
+        dataDir: connectionInfo.dataDir,
         serverURL: connectionInfo.serverUrl,
         password: connectionInfo.serverPassword
     });
