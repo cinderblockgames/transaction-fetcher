@@ -45,8 +45,11 @@ public class AmexTransactionReader : ITransactionReader
             Account = Options!.AccountId,
             Date = DateTime.Parse(text.Last()),
             PayeeName = text.First(),
-            AmountInCents = (int)
-                (decimal.Parse(text.Skip(1).First().Replace("*", ""), NumberStyles.Currency, Locale) * -100)
+            Amount = TransactionAmount.Payment(
+                decimal.Parse(
+                    text.Skip(1).First().Replace("*", ""),
+                    NumberStyles.Currency,
+                    Locale))
         };
 
         return transaction;

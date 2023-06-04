@@ -39,25 +39,21 @@ public class AllyTransactionReader : ITransactionReader
     {
         var text = GetRelevantText(message.HtmlBody);
 
-        var transaction = new Transaction
+        var amount = NextDecimal(text, "Ally Bank Alert", 3);
+        return new Transaction
         {
             Account = Options!.AccountId,
             Date = NextDate(text, "Date:"),
             PayeeName = NextValue(text, "Transaction:"),
-            AmountInCents = (int)(NextDecimal(text, "Ally Bank Alert", 3) * 100)
+            Amount = IsDebit(message.Subject)
+                ? TransactionAmount.Payment(amount)
+                : TransactionAmount.Deposit(amount)
         };
-
-        if (IsNegative(message.Subject))
-        {
-            transaction.AmountInCents *= -1;
-        }
-
-        return transaction;
     }
 
     #region " Helpers "
 
-    private bool IsNegative(string subject)
+    private bool IsDebit(string subject)
     {
         return subject.Contains("debit", StringComparison.OrdinalIgnoreCase);
     }

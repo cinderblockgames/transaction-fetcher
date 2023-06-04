@@ -23,7 +23,7 @@ public class Transaction
     public Guid? Id { get; set; }
     
     [JsonPropertyName("amount")] // amount
-    public int? AmountInCents { get; set; }
+    public int? Amount { get; set; }
     
     [JsonPropertyName("payee")] // id, overrides payee_name.
     public Guid? Payee { get; set; }
