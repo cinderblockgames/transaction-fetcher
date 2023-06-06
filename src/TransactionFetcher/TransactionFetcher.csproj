@@ -18,7 +18,9 @@
       <ProjectReference Include="..\TransactionFetcher.MailWrapper\TransactionFetcher.MailWrapper.csproj" />
       <ProjectReference Include="..\TransactionFetcher.Readers.Ally\TransactionFetcher.Readers.Ally.csproj" />
       <ProjectReference Include="..\TransactionFetcher.Readers.Amex\TransactionFetcher.Readers.Amex.csproj" />
+      <ProjectReference Include="..\TransactionFetcher.Readers.Barclays\TransactionFetcher.Readers.Barclays.csproj" />
       <ProjectReference Include="..\TransactionFetcher.Readers.TargetRedCard\TransactionFetcher.Readers.TargetRedCard.csproj" />
+      <ProjectReference Include="..\TransactionFetcher.Readers.USBank\TransactionFetcher.Readers.USBank.csproj" />
       <ProjectReference Include="..\TransactionFetcher.Readers\TransactionFetcher.Readers.csproj" />
     </ItemGroup>
 

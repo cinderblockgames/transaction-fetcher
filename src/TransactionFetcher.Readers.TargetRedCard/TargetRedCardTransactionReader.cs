@@ -88,7 +88,7 @@ public class TargetRedCardTransactionReader : ITransactionReader
             message.HtmlBody,
             @"A transaction of .?(?<amount>[\d., ]+) at (?<payee>[\w ]+) has posted");
 
-        var transaction = new Transaction
+        return new Transaction
         {
             Account = Options!.AccountId,
             Date = message.Date.Date,
@@ -96,8 +96,6 @@ public class TargetRedCardTransactionReader : ITransactionReader
             Amount = TransactionAmount.Payment(
                 decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale))
         };
-
-        return transaction;
     }
 
     #endregion

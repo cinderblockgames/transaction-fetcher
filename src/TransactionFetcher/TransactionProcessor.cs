@@ -55,7 +55,7 @@ internal class TransactionProcessor : Processor
 
                 if (!found)
                 {
-                    Console.WriteLine($"Unable to find transaction reader for '{message.Subject}.'");
+                    Console.WriteLine($"Unable to find transaction reader for '{message.Subject}' transaction alert.");
                 }
             }
         });

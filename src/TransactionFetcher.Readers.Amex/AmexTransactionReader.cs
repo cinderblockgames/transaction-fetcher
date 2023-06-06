@@ -40,7 +40,7 @@ public class AmexTransactionReader : ITransactionReader
     {
         var text = GetRelevantText(message.HtmlBody);
 
-        var transaction = new Transaction
+        return new Transaction
         {
             Account = Options!.AccountId,
             Date = DateTime.Parse(text.Last()),
@@ -51,8 +51,6 @@ public class AmexTransactionReader : ITransactionReader
                     NumberStyles.Currency,
                     Locale))
         };
-
-        return transaction;
     }
 
     #region " Helpers "
