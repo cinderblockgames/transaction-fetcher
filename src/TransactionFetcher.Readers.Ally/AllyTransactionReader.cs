@@ -43,7 +43,7 @@ public class AllyTransactionReader : ITransactionReader
         return new Transaction
         {
             Account = Options!.AccountId,
-            Date = NextDate(text, "Date:"),
+            Date = NextDate(text, "Date:") ?? message.Date.Date,
             PayeeName = NextValue(text, "Transaction:"),
             Amount = IsDebit(message.Subject)
                 ? TransactionAmount.Payment(amount)
@@ -58,22 +58,22 @@ public class AllyTransactionReader : ITransactionReader
         return subject.Contains("debit", StringComparison.OrdinalIgnoreCase);
     }
 
-    private string NextValue(List<string> text, string after, int skip = 1)
+    private string? NextValue(List<string> text, string after, int skip = 1)
     {
         var index = text.IndexOf(after);
-        return text[index + skip];
+        return index > -1 ? text[index + skip] : null;
     }
 
-    private decimal NextDecimal(List<string> text, string after, int skip = 1)
+    private decimal? NextDecimal(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
-        return decimal.Parse(value, NumberStyles.Currency, Locale);
+        return value != null ? decimal.Parse(value, NumberStyles.Currency, Locale) : null;
     }
 
-    private DateTime NextDate(List<string> text, string after, int skip = 1)
+    private DateTime? NextDate(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
-        return DateTime.ParseExact(value, "M/d/yyyy", Locale, DateTimeStyles.None);
+        return value != null ? DateTime.ParseExact(value, "M/d/yyyy", Locale, DateTimeStyles.None) : null;
     }
 
     private List<string> GetRelevantText(string html)
