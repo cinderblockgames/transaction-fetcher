@@ -49,6 +49,7 @@ public static class Dependencies
         
         // Transaction readers.
         services.AddSingleton(new CultureInfo(env.Locale));
+        services.AddSingleton(new PollInterval { Interval = TimeSpan.FromSeconds(int.Parse(env.PollIntervalSeconds)) });
         services.AddSingleton(provider =>
             new TransactionReaders(env.AccountsFolder, provider.GetRequiredService<CultureInfo>()));
         services.AddSingleton<TransactionProcessor>();

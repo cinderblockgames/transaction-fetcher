@@ -38,14 +38,18 @@ public class ChaseTransactionReader : ITransactionReader
     public Transaction Read(MimeMessage message)
     {
         var text = GetRelevantText(message.HtmlBody);
+
+        var credit = message.Subject.Contains("credit", StringComparison.OrdinalIgnoreCase);
         
-        var amount = NextDecimal(text, "Amount");
+        var amount = NextDecimal(text, credit ? "Credit Amount" : "Amount");
         return new Transaction
         {
             Account = Options!.AccountId,
             Date = NextDate(text, "Date"),
             PayeeName = NextValue(text, "Merchant"),
-            Amount = TransactionAmount.Payment(amount)
+            Amount = credit
+                ? TransactionAmount.Deposit(amount)
+                : TransactionAmount.Payment(amount)
         };
     }
     

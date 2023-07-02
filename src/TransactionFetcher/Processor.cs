@@ -113,11 +113,12 @@ internal abstract class Processor : IProcessor, IDisposable
 
 internal static class ServiceProviderExtensions
 {
-    public static T BuildProcessor<T>(this IServiceProvider @this, TimeSpan interval)
+    public static T BuildProcessor<T>(this IServiceProvider @this, TimeSpan? interval = null)
         where T : IProcessor
     {
         var processor = @this.GetRequiredService<T>();
-        processor.Start(interval);
+        var poll = interval ?? @this.GetRequiredService<PollInterval>().Interval;
+        processor.Start(poll);
         return processor;
     }
 }

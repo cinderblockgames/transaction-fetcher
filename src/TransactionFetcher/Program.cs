@@ -22,14 +22,8 @@ if ("list-folders".Equals(args.FirstOrDefault(), StringComparison.OrdinalIgnoreC
 }
 else
 {
-    // Check for transactions every five minutes.
-    var importer = host.Services.BuildProcessor<TransactionProcessor>(
-#if DEBUG
-        TimeSpan.FromSeconds(10)
-#else
-    TimeSpan.FromMinutes(5)
-#endif
-    );
+    // Check for transactions every {POLL_INTERVAL_SECONDS} seconds.
+    var importer = host.Services.BuildProcessor<TransactionProcessor>();;
 
     var stop = new ManualResetEventSlim();
     AppDomain.CurrentDomain.ProcessExit += (_, _) => stop.Set();

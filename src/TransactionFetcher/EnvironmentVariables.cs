@@ -17,14 +17,15 @@ public class EnvironmentVariables
     public string? MailFolder { get; }
     public string MailUseTls { get; }
     public string ImapPort { get; }
+    public string PollIntervalSeconds { get; }
 
-    public string AccountsFolder { get; set; }
-    public string Locale { get; set; }
+    public string AccountsFolder { get; }
+    public string Locale { get; }
 
     private EnvironmentVariables(
         string serverUrl, string serverPassword, string budgetSyncId, string dataDir,
         string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls,
-        string imapPort,
+        string imapPort, string pollIntervalSeconds,
         string accountsFolder, string locale)
     {
         ServerUrl = serverUrl;
@@ -38,6 +39,7 @@ public class EnvironmentVariables
         MailFolder = mailFolder;
         MailUseTls = mailUseTls;
         ImapPort = imapPort;
+        PollIntervalSeconds = pollIntervalSeconds;
 
         AccountsFolder = accountsFolder;
         Locale = locale;
@@ -131,6 +133,13 @@ public class EnvironmentVariables
             imapPort = "143";
         }
 
+        if (!env.TryGetValue("POLL_INTERVAL_SECONDS", out string? pollIntervalSeconds) ||
+            string.IsNullOrEmpty(pollIntervalSeconds))
+        {
+            Console.WriteLine("POLL_INTERVAL_SECONDS not provided; defaulting to 300.");
+            pollIntervalSeconds = "300";
+        }
+
         // -----------------
         //   ACCOUNTS
         // -----------------
@@ -150,7 +159,8 @@ public class EnvironmentVariables
 
         return new EnvironmentVariables(
             serverUrl, serverPassword, budgetSyncId, dataDir,
-            mailServer, mailUsername, mailPassword, mailFolder, mailUseTls, imapPort,
+            mailServer, mailUsername, mailPassword, mailFolder, mailUseTls,
+            imapPort, pollIntervalSeconds,
             accountsFolder, locale);
     }
 }
