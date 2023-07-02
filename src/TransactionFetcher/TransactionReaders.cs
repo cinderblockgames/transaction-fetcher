@@ -15,6 +15,7 @@ public class TransactionReaders
         
         Console.WriteLine($"Loading accounts from {folder}.");
         Instances = Directory.EnumerateFiles(folder)
+            .OrderBy(file => file)
             .Select(BuildTransactionReader)
             .ToArray();
     }
