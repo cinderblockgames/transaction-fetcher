@@ -85,7 +85,7 @@ public class AllyTransactionReader : ITransactionReader
             .SelectNodes("//table")
             .First()
             .InnerText
-            .Split('\n', StringSplitOptions.RemoveEmptyEntries)
+            .Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
             .ToList();
     }
 
