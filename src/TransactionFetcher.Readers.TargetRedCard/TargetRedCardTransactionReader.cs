@@ -86,7 +86,7 @@ public class TargetRedCardTransactionReader : ITransactionReader
     {
         var match = Regex.Match(
             message.HtmlBody,
-            @"A transaction of .?(?<amount>[\d., ]+) at (?<payee>[\w ]+) has posted");
+            @"A transaction of .?(?<amount>[\d., ]+) at (?<payee>.+) has posted");
 
         return new Transaction
         {
