@@ -38,9 +38,9 @@ internal class TransactionProcessor : Processor
                     {
                         found = true;
                         Console.WriteLine($"::: {reader.Name} transaction alert found.");
-                        var transaction = reader.Read(message);
                         try
                         {
+                            var transaction = reader.Read(message);
                             transaction.ImportedId ??= message.MessageId; // Prevent duplicates.
                             await Actual.AddTransaction(transaction.Account!.Value, transaction);
                             await folder.StoreAsync(id, Seen);
