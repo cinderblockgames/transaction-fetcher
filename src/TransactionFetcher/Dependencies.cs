@@ -31,7 +31,7 @@ public static class Dependencies
             ServerUrl = env.ServerUrl,
             ServerPassword = env.ServerPassword,
             BudgetSyncId = Guid.Parse(env.BudgetSyncId),
-            DataDir = env.DataDir
+            DataDir = env.DataPath
         });
         services.AddSingleton<Actual>();
         
@@ -51,7 +51,7 @@ public static class Dependencies
         services.AddSingleton(new CultureInfo(env.Locale));
         services.AddSingleton(new PollInterval { Interval = TimeSpan.FromSeconds(int.Parse(env.PollIntervalSeconds)) });
         services.AddSingleton(provider =>
-            new TransactionReaders(env.AccountsFolder, provider.GetRequiredService<CultureInfo>()));
+            new TransactionReaders(env.AccountsPath, provider.GetRequiredService<CultureInfo>()));
         services.AddSingleton<TransactionProcessor>();
     }
 }

@@ -72,11 +72,10 @@ public class ChaseTransactionReader : ITransactionReader
         var value = NextValue(text, after, skip);
         if (value != null)
         {
-            value = value.Split(" at ", StringSplitOptions.None).First();
+            value = value.Split(" at ").First();
             return DateTime.ParseExact(value, "MMM d, yyyy", Locale, DateTimeStyles.None);
         }
         return value != null ? DateTime.ParseExact(value, "M/d/yyyy", Locale, DateTimeStyles.None) : null;
-        return null;
     }
     
     private List<string> GetRelevantText(string html)
