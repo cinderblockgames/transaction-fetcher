@@ -9,7 +9,7 @@ public class EnvironmentVariables
     public string ServerUrl { get; }
     public string ServerPassword { get; }
     public string BudgetSyncId { get; }
-    public string DataDir { get; }
+    public string DataPath { get; }
 
     public string MailServer { get; }
     public string MailUsername { get; }
@@ -19,19 +19,19 @@ public class EnvironmentVariables
     public string ImapPort { get; }
     public string PollIntervalSeconds { get; }
 
-    public string AccountsFolder { get; }
+    public string AccountsPath { get; }
     public string Locale { get; }
 
     private EnvironmentVariables(
-        string serverUrl, string serverPassword, string budgetSyncId, string dataDir,
+        string serverUrl, string serverPassword, string budgetSyncId, string dataPath,
         string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls,
         string imapPort, string pollIntervalSeconds,
-        string accountsFolder, string locale)
+        string accountsPath, string locale)
     {
         ServerUrl = serverUrl;
         ServerPassword = serverPassword;
         BudgetSyncId = budgetSyncId;
-        DataDir = dataDir;
+        DataPath = dataPath;
 
         MailServer = mailServer;
         MailUsername = mailUsername;
@@ -41,7 +41,7 @@ public class EnvironmentVariables
         ImapPort = imapPort;
         PollIntervalSeconds = pollIntervalSeconds;
 
-        AccountsFolder = accountsFolder;
+        AccountsPath= accountsPath;
         Locale = locale;
     }
 
@@ -80,10 +80,10 @@ public class EnvironmentVariables
             throw new Exception("BUDGET_SYNC_ID must be valued.");
         }
         
-        if (!env.TryGetValue("DATA_DIR", out string? dataDir) || string.IsNullOrWhiteSpace(dataDir))
+        if (!env.TryGetValue("DATA_PATH", out string? dataPath) || string.IsNullOrWhiteSpace(dataPath))
         {
-            Console.WriteLine("DATA_DIR not provided; defaulting to /data.");
-            dataDir = "/data";
+            Console.WriteLine("DATA_PATH not provided; defaulting to /data.");
+            dataPath = "/data";
         }
 
         // -----------------
@@ -144,11 +144,11 @@ public class EnvironmentVariables
         //   ACCOUNTS
         // -----------------
 
-        if (!env.TryGetValue("ACCOUNTS_FOLDER", out string? accountsFolder) ||
-            string.IsNullOrWhiteSpace(accountsFolder))
+        if (!env.TryGetValue("ACCOUNTS_PATH", out string? accountsPath) ||
+            string.IsNullOrWhiteSpace(accountsPath))
         {
-            Console.WriteLine("ACCOUNTS_FOLDER not provided; defaulting to /accounts.");
-            accountsFolder = "/accounts";
+            Console.WriteLine("ACCOUNTS_PATH not provided; defaulting to /accounts.");
+            accountsPath = "/accounts";
         }
 
         if (!env.TryGetValue("LOCALE", out string? locale) || string.IsNullOrWhiteSpace(locale))
@@ -158,9 +158,9 @@ public class EnvironmentVariables
         }
 
         return new EnvironmentVariables(
-            serverUrl, serverPassword, budgetSyncId, dataDir,
+            serverUrl, serverPassword, budgetSyncId, dataPath,
             mailServer, mailUsername, mailPassword, mailFolder, mailUseTls,
             imapPort, pollIntervalSeconds,
-            accountsFolder, locale);
+            accountsPath, locale);
     }
 }
