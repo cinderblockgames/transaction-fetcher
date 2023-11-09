@@ -121,9 +121,9 @@ public class EnvironmentVariables
             Console.WriteLine("MAIL_FOLDER not provided; defaulting to inbox.");
         }
 
-        if (!env.TryGetValue("MAIL_USER_TLS", out string? mailUseTls) || string.IsNullOrWhiteSpace(mailUseTls))
+        if (!env.TryGetValue("MAIL_USE_TLS", out string? mailUseTls) || string.IsNullOrWhiteSpace(mailUseTls))
         {
-            Console.WriteLine("MAIL_USER_TLS not provided; defaulting to false.");
+            Console.WriteLine("MAIL_USE_TLS not provided; defaulting to false.");
             mailUseTls = "false";
         }
 
