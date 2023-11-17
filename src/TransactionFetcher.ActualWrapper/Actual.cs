@@ -1,4 +1,4 @@
-using Jering.Javascript.NodeJS;
+using System.Net.Http.Json;
 using TransactionFetcher.Readers;
 
 namespace TransactionFetcher.ActualWrapper;
@@ -8,60 +8,35 @@ public class Actual
     
     #region " Constructor, Private Properties "
     
-    private INodeJSService Node { get; }
-    private ConnectionInfo ConnectionInfo { get; }
+    private HttpClient Api { get; }
 
-    public Actual(INodeJSService node, ConnectionInfo connectionInfo)
+    public Actual(ConnectionInfo connectionInfo)
     {
-        Node = node;
-        ConnectionInfo = connectionInfo;
+        Api = new HttpClient()
+        {
+            BaseAddress = new Uri(
+                new Uri(connectionInfo.ApiUrl!),
+                $"v1/budgets/{connectionInfo.BudgetSyncId}/accounts/"
+            )
+        };
+        Api.DefaultRequestHeaders.Add("X-API-KEY", connectionInfo.ApiKey);
     }
     
     #endregion
 
-    public async Task AddTransaction(Guid accountId, Transaction transaction)
+    public async Task<bool> AddTransaction(Guid accountId, Transaction transaction)
     {
-        await AddTransactions(accountId, new Transaction[] { transaction });
-    }
-    
-    public async Task AddTransactions(Guid accountId, IEnumerable<Transaction> transactions)
-    {
-        await Invoke("addTransactions", new object[] { accountId, transactions });
-    }
-
-    #region " Invoke "
-    
-    private async Task Invoke(string method, object? arg = null)
-    {
-        await Invoke(method, new[] { arg });
-    }
-    
-    private async Task Invoke(string method, object?[]? args)
-    {
-        await Node.InvokeFromFileAsync("api-wrapper.js", method, Args(args));
-    }
-
-    private async Task<T?> Invoke<T>(string method, object? arg = null)
-    {
-        return await Invoke<T>(method, new[] { arg });
-    }
-
-    private async Task<T?> Invoke<T>(string method, object?[]? args)
-    {
-        return await Node.InvokeFromFileAsync<T>("api-wrapper.js", method, Args(args));
-    }
-
-    private object?[] Args(object?[]? args)
-    {
-        var joined = new object?[] { ConnectionInfo };
-        if (args != null)
+        var response = await Api.PostAsJsonAsync(
+            $"{accountId}/transactions",
+            new TransactionEnvelope(transaction)
+        );
+        if (!response.IsSuccessStatusCode)
         {
-            joined = joined.Concat(args).ToArray();
+            Console.WriteLine(await response.RequestMessage.Content.ReadAsStringAsync());
+            Console.WriteLine($"    [{(int)response.StatusCode} {response.StatusCode}] {await response.Content.ReadAsStringAsync()}");
         }
 
-        return joined;
+        return response.IsSuccessStatusCode;
     }
-    
-    #endregion
-    
+
 }

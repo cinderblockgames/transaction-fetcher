@@ -14,8 +14,7 @@ WORKDIR /app
 COPY --from=build-env /app/TransactionFetcher/out .
 
 RUN apt-get update && \
-    apt-get install -y dumb-init nodejs npm && \
-    npm i @actual-app/api
+    apt-get install -y dumb-init
     
 
 # env variables go here

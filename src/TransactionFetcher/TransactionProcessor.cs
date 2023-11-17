@@ -42,8 +42,11 @@ internal class TransactionProcessor : Processor
                         {
                             var transaction = reader.Read(message);
                             transaction.ImportedId ??= message.MessageId; // Prevent duplicates.
-                            await Actual.AddTransaction(transaction.Account!.Value, transaction);
-                            await folder.StoreAsync(id, Seen);
+                            var success = await Actual.AddTransaction(transaction.Account!.Value, transaction);
+                            if (success)
+                            {
+                                await folder.StoreAsync(id, Seen);
+                            }
                         }
                         catch (Exception ex)
                         {

@@ -6,10 +6,9 @@ namespace TransactionFetcher;
 
 public class EnvironmentVariables
 {
-    public string ServerUrl { get; }
-    public string ServerPassword { get; }
+    public string ApiUrl { get; }
+    public string ApiKey { get; }
     public string BudgetSyncId { get; }
-    public string DataPath { get; }
 
     public string MailServer { get; }
     public string MailUsername { get; }
@@ -23,15 +22,14 @@ public class EnvironmentVariables
     public string Locale { get; }
 
     private EnvironmentVariables(
-        string serverUrl, string serverPassword, string budgetSyncId, string dataPath,
+        string apiUrl, string apiKey, string budgetSyncId,
         string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls,
         string imapPort, string pollIntervalSeconds,
         string accountsPath, string locale)
     {
-        ServerUrl = serverUrl;
-        ServerPassword = serverPassword;
+        ApiUrl = apiUrl;
+        ApiKey = apiKey;
         BudgetSyncId = budgetSyncId;
-        DataPath = dataPath;
 
         MailServer = mailServer;
         MailUsername = mailUsername;
@@ -53,37 +51,31 @@ public class EnvironmentVariables
         //   ACTUAL
         // -----------------
 
-        if (!env.TryGetValue("SERVER_URL", out string? serverUrl) || string.IsNullOrWhiteSpace(serverUrl))
+        if (!env.TryGetValue("API_URL", out string? apiUrl) || string.IsNullOrWhiteSpace(apiUrl))
         {
-            throw new Exception("SERVER_URL must be valued.");
+            throw new Exception("API_URL must be valued.");
         }
 
-        if (!env.TryGetValue("SERVER_PASSWORD", out string? serverPassword) ||
-            string.IsNullOrWhiteSpace(serverPassword))
+        if (!env.TryGetValue("API_KEY", out string? apiKey) ||
+            string.IsNullOrWhiteSpace(apiKey))
         {
-            if (!env.TryGetValue("SERVER_PASSWORD_FILE", out string? serverPasswordFile) ||
-                string.IsNullOrWhiteSpace(serverPasswordFile) ||
-                !File.Exists(serverPasswordFile))
+            if (!env.TryGetValue("API_KEY_FILE", out string? apiKeyFile) ||
+                string.IsNullOrWhiteSpace(apiKeyFile) ||
+                !File.Exists(apiKeyFile))
             {
-                throw new Exception("SERVER_PASSWORD or SERVER_PASSWORD_FILE (and related file) must be valued.");
+                throw new Exception("API_KEY or API_KEY_FILE (and related file) must be valued.");
             }
 
-            serverPassword = File.ReadAllText(serverPasswordFile);
-            if (string.IsNullOrWhiteSpace(serverPassword))
+            apiKey = File.ReadAllText(apiKeyFile);
+            if (string.IsNullOrWhiteSpace(apiKey))
             {
-                throw new Exception("SERVER_PASSWORD or SERVER_PASSWORD_FILE (and related file) must be valued.");
+                throw new Exception("API_KEY or API_KEY_FILE (and related file) must be valued.");
             }
         }
 
         if (!env.TryGetValue("BUDGET_SYNC_ID", out string? budgetSyncId) || string.IsNullOrWhiteSpace(budgetSyncId))
         {
             throw new Exception("BUDGET_SYNC_ID must be valued.");
-        }
-        
-        if (!env.TryGetValue("DATA_PATH", out string? dataPath) || string.IsNullOrWhiteSpace(dataPath))
-        {
-            Console.WriteLine("DATA_PATH not provided; defaulting to /data.");
-            dataPath = "/data";
         }
 
         // -----------------
@@ -158,7 +150,7 @@ public class EnvironmentVariables
         }
 
         return new EnvironmentVariables(
-            serverUrl, serverPassword, budgetSyncId, dataPath,
+            apiUrl, apiKey, budgetSyncId,
             mailServer, mailUsername, mailPassword, mailFolder, mailUseTls,
             imapPort, pollIntervalSeconds,
             accountsPath, locale);

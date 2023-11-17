@@ -7,20 +7,22 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Update="js\api-wrapper.js">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
       <None Update="js\package.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Jering.Javascript.NodeJS" Version="6.3.1" />
+      <None Remove="js\**" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\TransactionFetcher.Readers\TransactionFetcher.Readers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="js\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="js\**" />
     </ItemGroup>
 
 </Project>
