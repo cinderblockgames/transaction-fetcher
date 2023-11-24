@@ -28,7 +28,7 @@ public class AllyTransactionReader : ITransactionReader
     {
         return message.From.OfType<MailboxAddress>().Any(from =>
                    from.Domain.EndsWith("ally.com", StringComparison.OrdinalIgnoreCase))
-               && message.HtmlBody.Contains($"<nobr>{Options!.LastFour}</nobr>");
+               && message.HtmlBody.Contains($"*{Options!.LastFour}</td>");
     }
 
     #endregion
@@ -39,12 +39,13 @@ public class AllyTransactionReader : ITransactionReader
     {
         var text = GetRelevantText(message.HtmlBody);
 
-        var amount = NextDecimal(text, "Ally Bank Alert", 3);
+        var amount = NextDecimal(text, "Ally Bank Alert", 3)
+                         ?? NextDecimal(text, "Amount");
         return new Transaction
         {
             Account = Options!.AccountId,
             Date = NextDate(text, "Date:") ?? message.Date.Date,
-            PayeeName = NextValue(text, "Transaction:"),
+            PayeeName = NextValue(text, "Transaction:") ?? NextValue(text, "To"),
             Amount = IsDebit(message.Subject)
                 ? TransactionAmount.Payment(amount)
                 : TransactionAmount.Deposit(amount)
@@ -55,7 +56,8 @@ public class AllyTransactionReader : ITransactionReader
 
     private bool IsDebit(string subject)
     {
-        return subject.Contains("debit", StringComparison.OrdinalIgnoreCase);
+        return subject.Contains("debit", StringComparison.OrdinalIgnoreCase)
+            || subject.Contains("payment", StringComparison.OrdinalIgnoreCase);
     }
 
     private string? NextValue(List<string> text, string after, int skip = 1)
