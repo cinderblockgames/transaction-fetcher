@@ -27,9 +27,10 @@ public class AmexTransactionReader : ITransactionReader
     public bool CanRead(MimeMessage message)
     {
         return message.From.OfType<MailboxAddress>().Any(from =>
-                   from.Domain.Equals("welcome.americanexpress.com", StringComparison.OrdinalIgnoreCase))
+                   (from.Domain.Equals("welcome.americanexpress.com", StringComparison.OrdinalIgnoreCase))
+                   || (from.LocalPart.Contains("americanexpress", StringComparison.OrdinalIgnoreCase))) // SimpleLogin
                && message.Subject.Equals("Large Purchase Approved", StringComparison.OrdinalIgnoreCase)
-               && message.HtmlBody.Contains($"<b>{Options!.LastFive}</b>");
+               && message.HtmlBody.Contains($"Account Ending: {Options!.LastFive}", StringComparison.OrdinalIgnoreCase);
     }
 
     #endregion
