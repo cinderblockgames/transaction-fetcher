@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using HtmlAgilityPack;
 using MimeKit;
 
@@ -28,7 +29,7 @@ public class AllyTransactionReader : ITransactionReader
     {
         return message.From.OfType<MailboxAddress>().Any(from =>
                    from.Domain.EndsWith("ally.com", StringComparison.OrdinalIgnoreCase))
-               && message.HtmlBody.Contains($"*{Options!.LastFour}</td>");
+               && message.HtmlBody.Contains($"{Options!.LastFour}");
     }
 
     #endregion
@@ -40,7 +41,8 @@ public class AllyTransactionReader : ITransactionReader
         var text = GetRelevantText(message.HtmlBody);
 
         var amount = NextDecimal(text, "Ally Bank Alert", 3)
-                         ?? NextDecimal(text, "Amount");
+                         ?? NextDecimal(text, "Amount")
+                         ?? NextDecimal(text, "Bank Alert", 4);
         return new Transaction
         {
             Account = Options!.AccountId,
@@ -69,7 +71,13 @@ public class AllyTransactionReader : ITransactionReader
     private decimal? NextDecimal(List<string> text, string after, int skip = 1)
     {
         var value = NextValue(text, after, skip);
-        return value != null ? decimal.Parse(value, NumberStyles.Currency, Locale) : null;
+        if (value != null)
+        {
+            value = Regex.Match(value, @"\$\d+\.\d{2}").Value;
+            return decimal.Parse(value, NumberStyles.Currency, Locale);
+        }
+
+        return null;
     }
 
     private DateTime? NextDate(List<string> text, string after, int skip = 1)
