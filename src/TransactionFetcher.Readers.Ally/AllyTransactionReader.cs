@@ -74,7 +74,10 @@ public class AllyTransactionReader : ITransactionReader
         if (value != null)
         {
             value = Regex.Match(value, @"\$[\d,]+\.\d{2}").Value;
-            return decimal.Parse(value, NumberStyles.Currency, Locale);
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                return decimal.Parse(value, NumberStyles.Currency, Locale);
+            }
         }
 
         return null;
