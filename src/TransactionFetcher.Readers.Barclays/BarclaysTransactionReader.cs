@@ -27,7 +27,8 @@ public class BarclaysTransactionReader : ITransactionReader
     public bool CanRead(MimeMessage message)
     {
         return message.From.OfType<MailboxAddress>().Any(from =>
-                   from.Domain.Equals("services.BarclaysUS.com", StringComparison.OrdinalIgnoreCase))
+                   from.Domain.Equals("services.BarclaysUS.com", StringComparison.OrdinalIgnoreCase)
+                   || from.LocalPart.Contains("BarclaysUS", StringComparison.OrdinalIgnoreCase)) // SimpleLogin
                && message.HtmlBody.Contains($">{Options!.LastFour}");
     }
     
