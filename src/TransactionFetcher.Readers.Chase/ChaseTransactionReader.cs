@@ -40,16 +40,18 @@ public class ChaseTransactionReader : ITransactionReader
         var text = GetRelevantText(message.HtmlBody);
 
         var credit = message.Subject.Contains("credit", StringComparison.OrdinalIgnoreCase);
+        var payment = message.Subject.Contains("payment", StringComparison.OrdinalIgnoreCase);
         
-        var amount = NextDecimal(text, credit ? "Credit Amount" : "Amount");
+        var amount = NextDecimal(text, credit ? "Credit Amount" : payment ? "Payment amount" : "Amount");
         return new Transaction
         {
             Account = Options!.AccountId,
-            Date = NextDate(text, "Date"),
+            Date = NextDate(text, payment ? "Posted date" : "Date"),
             PayeeName = NextValue(text, "Merchant"),
-            Amount = credit
+            Amount = (credit || payment)
                 ? TransactionAmount.Deposit(amount)
-                : TransactionAmount.Payment(amount)
+                : TransactionAmount.Payment(amount),
+            Notes = payment ? "Payment posted." : null
         };
     }
     
