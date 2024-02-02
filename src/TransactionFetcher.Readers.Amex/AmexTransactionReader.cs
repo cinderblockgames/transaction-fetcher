@@ -27,9 +27,7 @@ public class AmexTransactionReader : ITransactionReader
     public bool CanRead(MimeMessage message)
     {
         return message.From.OfType<MailboxAddress>().Any(from =>
-                   (from.Domain.Equals("welcome.americanexpress.com", StringComparison.OrdinalIgnoreCase))
-                   || from.LocalPart.Contains("americanexpress", StringComparison.OrdinalIgnoreCase)) // SimpleLogin
-               && message.Subject.Equals("Large Purchase Approved", StringComparison.OrdinalIgnoreCase)
+                   from.Domain.Equals("welcome.americanexpress.com", StringComparison.OrdinalIgnoreCase))
                && message.HtmlBody.Contains($"Account Ending: {Options!.LastFive}", StringComparison.OrdinalIgnoreCase);
     }
 
@@ -39,18 +37,62 @@ public class AmexTransactionReader : ITransactionReader
 
     public Transaction Read(MimeMessage message)
     {
-        var text = GetRelevantText(message.HtmlBody);
+        return TryReadCredit(message) 
+               ?? TryReadDebit(message)
+               ?? UnknownTransaction(message);
+    }
 
+    private Transaction? TryReadCredit(MimeMessage message)
+    {
+        if (message.Subject.Contains("credit", StringComparison.OrdinalIgnoreCase))
+        {
+            var text = GetRelevantText(message.HtmlBody);
+            
+            return new Transaction
+            {
+                Account = Options!.AccountId,
+                Date = DateTime.Parse(text.Skip(7).First()),
+                PayeeName = text.Skip(5).First(),
+                Amount = TransactionAmount.Deposit(
+                    decimal.Parse(
+                        text.Skip(6).First().Replace("-", ""),
+                        NumberStyles.Currency,
+                        Locale))
+            };
+        }
+
+        return null;
+    }
+
+    private Transaction? TryReadDebit(MimeMessage message)
+    {
+        if (message.Subject.Equals("Large Purchase Approved", StringComparison.OrdinalIgnoreCase))
+        {
+            var text = GetRelevantText(message.HtmlBody);
+
+            return new Transaction
+            {
+                Account = Options!.AccountId,
+                Date = DateTime.Parse(text.Skip(9).First()),
+                PayeeName = text.Skip(7).First(),
+                Amount = TransactionAmount.Payment(
+                    decimal.Parse(
+                        text.Skip(8).First().Replace("*", ""),
+                        NumberStyles.Currency,
+                        Locale))
+            };
+        }
+
+        return null;
+    }
+
+    private Transaction UnknownTransaction(MimeMessage message)
+    {
         return new Transaction
         {
             Account = Options!.AccountId,
-            Date = DateTime.Parse(text.Last()),
-            PayeeName = text.First(),
-            Amount = TransactionAmount.Payment(
-                decimal.Parse(
-                    text.Skip(1).First().Replace("*", ""),
-                    NumberStyles.Currency,
-                    Locale))
+            Date = message.Date.Date,
+            Notes = "Unknown transaction."
         };
     }
 
@@ -65,7 +107,6 @@ public class AmexTransactionReader : ITransactionReader
             .SelectNodes("//p")
             .Select(node => node.InnerText)
             .Where(text => !string.IsNullOrWhiteSpace(text))
-            .Skip(7).Take(3)
             .ToList();
     }
 
