@@ -7,5 +7,5 @@ public class ConnectionInfo
     public string? Password { get; set; }
     public string? Folder { get; set; }
     public bool UseTls { get; set; }
-    public int ImapPort { get; set; } 
+    public int ImapPort { get; set; }
 }

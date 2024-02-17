@@ -15,8 +15,11 @@ public class EnvironmentVariables
     public string MailPassword { get; }
     public string? MailFolder { get; }
     public string MailUseTls { get; }
+    
     public string ImapPort { get; }
     public string PollIntervalSeconds { get; }
+    
+    public string DeleteAfterProcessing { get; }
 
     public string AccountsPath { get; }
     public string Locale { get; }
@@ -25,6 +28,7 @@ public class EnvironmentVariables
         string apiUrl, string apiKey, string budgetSyncId,
         string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls,
         string imapPort, string pollIntervalSeconds,
+        string deleteAfterProcessing,
         string accountsPath, string locale)
     {
         ApiUrl = apiUrl;
@@ -36,9 +40,12 @@ public class EnvironmentVariables
         MailPassword = mailPassword;
         MailFolder = mailFolder;
         MailUseTls = mailUseTls;
+        
         ImapPort = imapPort;
         PollIntervalSeconds = pollIntervalSeconds;
 
+        DeleteAfterProcessing = deleteAfterProcessing;
+        
         AccountsPath= accountsPath;
         Locale = locale;
     }
@@ -131,6 +138,13 @@ public class EnvironmentVariables
             Console.WriteLine("POLL_INTERVAL_SECONDS not provided; defaulting to 300.");
             pollIntervalSeconds = "300";
         }
+        
+        if (!env.TryGetValue("DELETE_AFTER_PROCESSING", out string? deleteAfterProcessing) ||
+            string.IsNullOrEmpty(deleteAfterProcessing))
+        {
+            Console.WriteLine("DELETE_AFTER_PROCESSING not provided; defaulting to false.");
+            deleteAfterProcessing = "false";
+        }
 
         // -----------------
         //   ACCOUNTS
@@ -153,6 +167,7 @@ public class EnvironmentVariables
             apiUrl, apiKey, budgetSyncId,
             mailServer, mailUsername, mailPassword, mailFolder, mailUseTls,
             imapPort, pollIntervalSeconds,
+            deleteAfterProcessing,
             accountsPath, locale);
     }
 }

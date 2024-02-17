@@ -12,14 +12,18 @@ internal class TransactionProcessor : Processor
     private Imap Imap { get; }
     private Actual Actual { get; }
     
-    private StoreFlagsRequest Seen { get; } =
-        new StoreFlagsRequest(StoreAction.Add, MessageFlags.Seen) { Silent = true };
+    private StoreFlagsRequest Seen { get; }
     
-    public TransactionProcessor(TransactionReaders readers, Imap imap, Actual actual)
+    public TransactionProcessor(TransactionReaders readers, Imap imap, Actual actual, ProcessorOptions options)
     {
         Readers = readers.Instances;
         Imap = imap;
         Actual = actual;
+        
+        Seen = new StoreFlagsRequest(
+            StoreAction.Add,
+            options.DeleteAfterProcessing ? MessageFlags.Deleted : MessageFlags.Seen
+        ) { Silent = true };
     }
 
     protected override async Task Process()
