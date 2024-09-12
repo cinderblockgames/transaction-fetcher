@@ -48,7 +48,8 @@ public class BarclaysTransactionReader : ITransactionReader
             Date = DateTime.Parse(match.Groups["date"].Value, Locale),
             PayeeName = match.Groups["payee"].Value,
             Amount = TransactionAmount.Payment(
-                decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale))
+                decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale)),
+            Cleared = false
         };
     }
     

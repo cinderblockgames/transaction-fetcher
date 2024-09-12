@@ -57,7 +57,8 @@ public class AmexTransactionReader : ITransactionReader
                     decimal.Parse(
                         text.Skip(6).First().Replace("-", ""),
                         NumberStyles.Currency,
-                        Locale))
+                        Locale)),
+                Cleared = false
             };
         }
 
@@ -79,7 +80,8 @@ public class AmexTransactionReader : ITransactionReader
                     decimal.Parse(
                         text.Skip(8).First().Replace("*", ""),
                         NumberStyles.Currency,
-                        Locale))
+                        Locale)),
+                Cleared = false
             };
         }
 
@@ -92,7 +94,8 @@ public class AmexTransactionReader : ITransactionReader
         {
             Account = Options!.AccountId,
             Date = message.Date.Date,
-            Notes = "Unknown transaction."
+            Notes = "Unknown transaction.",
+            Cleared = false
         };
     }
 

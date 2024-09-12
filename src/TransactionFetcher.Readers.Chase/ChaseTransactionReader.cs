@@ -51,7 +51,8 @@ public class ChaseTransactionReader : ITransactionReader
             Amount = (credit || payment)
                 ? TransactionAmount.Deposit(amount)
                 : TransactionAmount.Payment(amount),
-            Notes = payment ? "Payment posted." : null
+            Notes = payment ? "Payment posted." : null,
+            Cleared = false
         };
     }
     

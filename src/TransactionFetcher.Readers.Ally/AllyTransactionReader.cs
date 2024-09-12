@@ -50,7 +50,8 @@ public class AllyTransactionReader : ITransactionReader
             PayeeName = NextValue(text, "Transaction:") ?? NextValue(text, "To"),
             Amount = IsDebit(message.Subject)
                 ? TransactionAmount.Payment(amount)
-                : TransactionAmount.Deposit(amount)
+                : TransactionAmount.Deposit(amount),
+            Cleared = false
         };
     }
 

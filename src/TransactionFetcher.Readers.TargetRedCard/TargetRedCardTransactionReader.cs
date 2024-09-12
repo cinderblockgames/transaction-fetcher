@@ -56,7 +56,8 @@ public class TargetRedCardTransactionReader : ITransactionReader
                 Date = message.Date.Date,
                 Amount = TransactionAmount.Deposit(
                     decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale)),
-                Notes = "Card statement payment"
+                Notes = "Card statement payment",
+                Cleared = false
             };
 
             return transaction;
@@ -73,7 +74,8 @@ public class TargetRedCardTransactionReader : ITransactionReader
             {
                 Account = Options!.AccountId,
                 Date = message.Date.Date,
-                Notes = "Unknown credit; check card for details.  (May be card payment.)"
+                Notes = "Unknown credit; check card for details.  (May be card payment.)",
+                Cleared = false
             };
 
             return transaction;
@@ -94,7 +96,8 @@ public class TargetRedCardTransactionReader : ITransactionReader
             Date = message.Date.Date,
             PayeeName = match.Groups["payee"].Value,
             Amount = TransactionAmount.Payment(
-                decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale))
+                decimal.Parse(match.Groups["amount"].Value, NumberStyles.Currency, Locale)),
+            Cleared = false
         };
     }
 

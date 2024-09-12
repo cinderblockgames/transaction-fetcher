@@ -58,7 +58,8 @@ public class USBankTransactionReader : ITransactionReader
                 Account = Options!.AccountId,
                 Date = DateTime.Parse(dateMatch.Groups["date"].Value, Locale),
                 Amount = TransactionAmount.Deposit(
-                    decimal.Parse(amountMatch.Groups["amount"].Value, NumberStyles.Currency, Locale))
+                    decimal.Parse(amountMatch.Groups["amount"].Value, NumberStyles.Currency, Locale)),
+                Cleared = false
             };
         }
 
@@ -79,7 +80,8 @@ public class USBankTransactionReader : ITransactionReader
             Account = Options!.AccountId,
             Date = DateTime.Parse(dateMatch.Groups["date"].Value, Locale),
             Amount = TransactionAmount.Payment(
-                decimal.Parse(amountMatch.Groups["amount"].Value, NumberStyles.Currency, Locale))
+                decimal.Parse(amountMatch.Groups["amount"].Value, NumberStyles.Currency, Locale)),
+            Cleared = false
         };
     }
     
