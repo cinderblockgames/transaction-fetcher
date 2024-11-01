@@ -38,24 +38,59 @@ public class AllyTransactionReader : ITransactionReader
 
     public Transaction Read(MimeMessage message)
     {
-        var text = GetRelevantText(message.HtmlBody);
-
-        var amount = NextDecimal(text, "Ally Bank Alert", 3)
-                         ?? NextDecimal(text, "Amount")
-                         ?? NextDecimal(text, "Bank Alert", 4);
-        return new Transaction
-        {
-            Account = Options!.AccountId,
-            Date = NextDate(text, "Date:") ?? message.Date.Date,
-            PayeeName = NextValue(text, "Transaction:") ?? NextValue(text, "To"),
-            Amount = IsDebit(message.Subject)
-                ? TransactionAmount.Payment(amount)
-                : TransactionAmount.Deposit(amount),
-            Cleared = false
-        };
+        return TryReadDebit(message)
+               ?? ReadCredit(message);
     }
 
     #region " Helpers "
+
+    private Transaction? TryReadDebit(MimeMessage message)
+    {
+        if (IsDebit(message.Subject))
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(message.HtmlBody);
+
+            var text = doc.DocumentNode
+                .SelectNodes("//td")
+                .Select(node => node.InnerText)
+                .Where(text => !string.IsNullOrWhiteSpace(text))
+                .ToList();
+            
+            var amount = NextDecimal(text, "Amount");
+            return new Transaction
+            {
+                Account = Options!.AccountId,
+                Date = NextDate(text, "Date:") ?? message.Date.Date,
+                PayeeName = NextValue(text, "Transaction source"),
+                Amount = TransactionAmount.Payment(amount),
+                Cleared = false
+            };
+        }
+
+        return null;
+    }
+
+    private Transaction ReadCredit(MimeMessage message)
+    {
+        var doc = new HtmlDocument();
+        doc.LoadHtml(message.HtmlBody);
+
+        var text = doc.DocumentNode
+            .SelectNodes("//td")
+            .SelectMany(node => node.InnerText?.Split(' '))
+            .Where(text => !string.IsNullOrWhiteSpace(text))
+            .ToList();
+        
+        var amount = NextDecimal(text, Options!.LastFour, 3);
+        return new Transaction
+        {
+            Account = Options!.AccountId,
+            Date = message.Date.Date,
+            Amount = TransactionAmount.Deposit(amount),
+            Cleared = false
+        };
+    }
 
     private bool IsDebit(string subject)
     {
@@ -88,19 +123,6 @@ public class AllyTransactionReader : ITransactionReader
     {
         var value = NextValue(text, after, skip);
         return value != null ? DateTime.ParseExact(value, "M/d/yyyy", Locale, DateTimeStyles.None) : null;
-    }
-
-    private List<string> GetRelevantText(string html)
-    {
-        var doc = new HtmlDocument();
-        doc.LoadHtml(html);
-
-        return doc.DocumentNode
-            .SelectNodes("//table")
-            .First()
-            .InnerText
-            .Split('\n', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
-            .ToList();
     }
 
     #endregion
