@@ -54,7 +54,7 @@ public class AllyTransactionReader : ITransactionReader
             var text = doc.DocumentNode
                 .SelectNodes("//td")
                 .Select(node => node.InnerText)
-                .Where(text => !string.IsNullOrWhiteSpace(text))
+                .Select(text => string.IsNullOrWhiteSpace(text) ? null : text) // Nullify whitespace.
                 .ToList();
             
             var amount = NextDecimal(text, "Amount");
@@ -62,7 +62,7 @@ public class AllyTransactionReader : ITransactionReader
             {
                 Account = Options!.AccountId,
                 Date = NextDate(text, "Date:") ?? message.Date.Date,
-                PayeeName = NextValue(text, "Transaction source"),
+                PayeeName = NextValue(text, "Transaction source") ?? NextValue(text, "Transaction"),
                 Amount = TransactionAmount.Payment(amount),
                 Cleared = false
             };
