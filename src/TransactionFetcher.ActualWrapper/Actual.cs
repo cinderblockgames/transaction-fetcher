@@ -26,10 +26,22 @@ public class Actual
 
     public async Task<bool> AddTransaction(Guid accountId, Transaction transaction)
     {
-        var response = await Api.PostAsJsonAsync(
+        return await Process(() => Api.PostAsJsonAsync(
             $"{accountId}/transactions",
             new TransactionEnvelope(transaction)
-        );
+        ));
+    }
+
+    public async Task<bool> BankSync()
+    {
+        return await Process(() => Api.PostAsync("banksync", null));
+    }
+
+    #region " Process "
+    
+    private async Task<bool> Process(Func<Task<HttpResponseMessage>> call)
+    {
+        var response = await call();
         if (!response.IsSuccessStatusCode)
         {
             Console.WriteLine(await response.RequestMessage.Content.ReadAsStringAsync());
@@ -38,5 +50,7 @@ public class Actual
 
         return response.IsSuccessStatusCode;
     }
+    
+    #endregion
 
 }

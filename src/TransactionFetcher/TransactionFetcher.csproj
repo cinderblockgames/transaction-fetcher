@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MailKit" Version="4.0.0" />
+      <PackageReference Include="MailKit" Version="4.11.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
       <PackageReference Include="SLSAK" Version="0.2.1" />
     </ItemGroup>

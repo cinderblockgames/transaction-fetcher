@@ -9,6 +9,7 @@ public class EnvironmentVariables
     public string ApiUrl { get; }
     public string ApiKey { get; }
     public string BudgetSyncId { get; }
+    public string BankSync { get; }
 
     public string MailServer { get; }
     public string MailUsername { get; }
@@ -25,7 +26,7 @@ public class EnvironmentVariables
     public string Locale { get; }
 
     private EnvironmentVariables(
-        string apiUrl, string apiKey, string budgetSyncId,
+        string apiUrl, string apiKey, string budgetSyncId, string bankSync,
         string mailServer, string mailUsername, string mailPassword, string? mailFolder, string mailUseTls,
         string imapPort, string pollIntervalSeconds,
         string deleteAfterProcessing,
@@ -34,6 +35,7 @@ public class EnvironmentVariables
         ApiUrl = apiUrl;
         ApiKey = apiKey;
         BudgetSyncId = budgetSyncId;
+        BankSync = bankSync;
 
         MailServer = mailServer;
         MailUsername = mailUsername;
@@ -48,6 +50,7 @@ public class EnvironmentVariables
         
         AccountsPath= accountsPath;
         Locale = locale;
+
     }
 
     public static EnvironmentVariables Build()
@@ -83,6 +86,12 @@ public class EnvironmentVariables
         if (!env.TryGetValue("BUDGET_SYNC_ID", out string? budgetSyncId) || string.IsNullOrWhiteSpace(budgetSyncId))
         {
             throw new Exception("BUDGET_SYNC_ID must be valued.");
+        }
+        
+        if (!env.TryGetValue("BANK_SYNC", out string? bankSync) || string.IsNullOrWhiteSpace(bankSync))
+        {
+            Console.WriteLine("BANK_SYNC not provided; defaulting to false.");
+            bankSync = "false";
         }
 
         // -----------------
@@ -164,7 +173,7 @@ public class EnvironmentVariables
         }
 
         return new EnvironmentVariables(
-            apiUrl, apiKey, budgetSyncId,
+            apiUrl, apiKey, budgetSyncId, bankSync,
             mailServer, mailUsername, mailPassword, mailFolder, mailUseTls,
             imapPort, pollIntervalSeconds,
             deleteAfterProcessing,

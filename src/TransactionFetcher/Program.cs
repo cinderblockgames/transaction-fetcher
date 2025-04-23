@@ -23,7 +23,10 @@ if ("list-folders".Equals(args.FirstOrDefault(), StringComparison.OrdinalIgnoreC
 else
 {
     // Check for transactions every {POLL_INTERVAL_SECONDS} seconds.
-    var importer = host.Services.BuildProcessor<TransactionProcessor>();;
+    var importer = host.Services.BuildProcessor<TransactionProcessor>();
+    
+    // Bank sync every hour (if enabled).
+    var bankSync = host.Services.BuildProcessor<BankSyncProcessor>(TimeSpan.FromHours(1));
 
     var stop = new ManualResetEventSlim();
     AppDomain.CurrentDomain.ProcessExit += (_, _) => stop.Set();
@@ -32,5 +35,6 @@ else
 
     Console.WriteLine("Shutting down; please wait.");
     importer.Stop().Wait();
+    bankSync.Stop().Wait();
     Console.WriteLine("Shutdown complete.");
 }

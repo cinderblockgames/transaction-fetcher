@@ -19,6 +19,8 @@ public static class Dependencies
             BudgetSyncId = Guid.Parse(env.BudgetSyncId)
         });
         services.AddSingleton<Actual>();
+        services.AddSingleton(provider =>
+            new BankSyncProcessor(provider.GetRequiredService<Actual>(), bool.Parse(env.BankSync)));
         
         // Mail.
         services.AddSingleton(new MailWrapper.ConnectionInfo
