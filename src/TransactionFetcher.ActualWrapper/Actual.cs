@@ -44,7 +44,12 @@ public class Actual
         var response = await call();
         if (!response.IsSuccessStatusCode)
         {
-            Console.WriteLine(await response.RequestMessage.Content.ReadAsStringAsync());
+            var request = response.RequestMessage?.Content;
+            if (request != null)
+            {
+                Console.WriteLine(await request.ReadAsStringAsync());
+            }
+
             Console.WriteLine($"    [{(int)response.StatusCode} {response.StatusCode}] {await response.Content.ReadAsStringAsync()}");
         }
 
