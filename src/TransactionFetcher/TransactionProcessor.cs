@@ -19,10 +19,16 @@ internal class TransactionProcessor : Processor
         Readers = readers.Instances;
         Imap = imap;
         Actual = actual;
+
+        var flags = MessageFlags.Seen;
+        if (options.DeleteAfterProcessing)
+        {
+            flags |= MessageFlags.Deleted;
+        }
         
         Seen = new StoreFlagsRequest(
             StoreAction.Add,
-            options.DeleteAfterProcessing ? MessageFlags.Deleted : MessageFlags.Seen
+            flags
         ) { Silent = true };
     }
 
