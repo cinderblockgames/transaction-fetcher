@@ -1,0 +1,77 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher", "TransactionFetcher\TransactionFetcher.csproj", "{59F79841-6BF7-4C77-9D3D-A0AAD99CD87D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.ActualWrapper", "TransactionFetcher.ActualWrapper\TransactionFetcher.ActualWrapper.csproj", "{70B8CE67-6E5E-4746-B446-13BECE7E49E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers", "TransactionFetcher.Readers\TransactionFetcher.Readers.csproj", "{6C990B63-24FD-4315-9699-D004C70C2C32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.Ally", "TransactionFetcher.Readers.Ally\TransactionFetcher.Readers.Ally.csproj", "{EBAF1A75-D216-4660-BC70-9D255F762AA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.MailWrapper", "TransactionFetcher.MailWrapper\TransactionFetcher.MailWrapper.csproj", "{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{497F9D5A-2DFF-4554-8628-4506E7941CA4}"
+	ProjectSection(SolutionItems) = preProject
+		..\Dockerfile = ..\Dockerfile
+		..\README.md = ..\README.md
+		..\LICENSE = ..\LICENSE
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.TargetRedCard", "TransactionFetcher.Readers.TargetRedCard\TransactionFetcher.Readers.TargetRedCard.csproj", "{7AB51A07-1251-4D48-BE10-661838AA27AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.Amex", "TransactionFetcher.Readers.Amex\TransactionFetcher.Readers.Amex.csproj", "{D236BA79-30D7-48F9-BD02-EB1002799F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.Barclays", "TransactionFetcher.Readers.Barclays\TransactionFetcher.Readers.Barclays.csproj", "{CD013616-8EF8-4E2B-932D-856CA18CBBC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.USBank", "TransactionFetcher.Readers.USBank\TransactionFetcher.Readers.USBank.csproj", "{AE3FD90F-7DD0-4408-BF16-EA3BDBA3E96B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TransactionFetcher.Readers.Chase", "TransactionFetcher.Readers.Chase\TransactionFetcher.Readers.Chase.csproj", "{AF3A88B1-D6DD-4DCF-9EFA-783577E5FC95}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{59F79841-6BF7-4C77-9D3D-A0AAD99CD87D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F79841-6BF7-4C77-9D3D-A0AAD99CD87D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F79841-6BF7-4C77-9D3D-A0AAD99CD87D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F79841-6BF7-4C77-9D3D-A0AAD99CD87D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70B8CE67-6E5E-4746-B446-13BECE7E49E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70B8CE67-6E5E-4746-B446-13BECE7E49E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70B8CE67-6E5E-4746-B446-13BECE7E49E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70B8CE67-6E5E-4746-B446-13BECE7E49E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C990B63-24FD-4315-9699-D004C70C2C32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C990B63-24FD-4315-9699-D004C70C2C32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C990B63-24FD-4315-9699-D004C70C2C32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C990B63-24FD-4315-9699-D004C70C2C32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBAF1A75-D216-4660-BC70-9D255F762AA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A474091-4EF7-47AD-A2F5-3379D46EFD8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AB51A07-1251-4D48-BE10-661838AA27AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AB51A07-1251-4D48-BE10-661838AA27AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AB51A07-1251-4D48-BE10-661838AA27AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AB51A07-1251-4D48-BE10-661838AA27AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D236BA79-30D7-48F9-BD02-EB1002799F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D236BA79-30D7-48F9-BD02-EB1002799F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D236BA79-30D7-48F9-BD02-EB1002799F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D236BA79-30D7-48F9-BD02-EB1002799F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD013616-8EF8-4E2B-932D-856CA18CBBC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD013616-8EF8-4E2B-932D-856CA18CBBC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD013616-8EF8-4E2B-932D-856CA18CBBC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD013616-8EF8-4E2B-932D-856CA18CBBC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE3FD90F-7DD0-4408-BF16-EA3BDBA3E96B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE3FD90F-7DD0-4408-BF16-EA3BDBA3E96B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE3FD90F-7DD0-4408-BF16-EA3BDBA3E96B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE3FD90F-7DD0-4408-BF16-EA3BDBA3E96B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF3A88B1-D6DD-4DCF-9EFA-783577E5FC95}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF3A88B1-D6DD-4DCF-9EFA-783577E5FC95}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF3A88B1-D6DD-4DCF-9EFA-783577E5FC95}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF3A88B1-D6DD-4DCF-9EFA-783577E5FC95}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

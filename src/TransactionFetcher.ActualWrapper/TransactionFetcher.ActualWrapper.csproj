@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <None Update="js\package.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Remove="js\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TransactionFetcher.Readers\TransactionFetcher.Readers.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="js\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="js\**" />
+    </ItemGroup>
+
+</Project>
