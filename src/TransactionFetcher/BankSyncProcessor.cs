@@ -17,7 +17,7 @@ internal class BankSyncProcessor : Processor
     {
         if (Sync)
         {
-            Console.WriteLine($"::: Bank sync.");
+            Console.WriteLine("Starting bank sync.");
             await Actual.BankSync();
         }
     }
